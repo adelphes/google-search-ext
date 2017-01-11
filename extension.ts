@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import {window, workspace, commands, Document, Disposable, ExtensionContext, EventEmitter, 
+import {window, workspace, commands, Disposable, ExtensionContext, EventEmitter, 
     TextDocument, TextDocumentContentProvider, Uri, ViewColumn} from 'vscode';
 
 // this method is called when your extension is activated. activation is
@@ -23,7 +23,7 @@ export function activate(ctx: ExtensionContext) {
     ctx.subscriptions.push(provider);
 }
 
-class GoogleSearchController {
+export class GoogleSearchController {
 
     constructor() {
     }
@@ -84,7 +84,7 @@ class GoogleSearchController {
 export default class GoogleSearchProvider implements TextDocumentContentProvider {
 
     public static readonly SCHEME = 'google-search-preview';
-	private _onDidChange = new EventEmitter<vscode.Uri>();
+	private _onDidChange = new EventEmitter<Uri>();
 
 	constructor() {
 	}

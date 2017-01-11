@@ -13,17 +13,16 @@ import * as vscode from 'vscode';
 import * as myExtension from '../extension';
 
 // Defines a Mocha test suite to group tests of similar kind together
-suite("Word Count Tests", () => {
+suite("Google Search Tests", () => {
 
 	// Defines a Mocha unit test
-	test("Word Count", (done) => {
-		let testWordCounter = new myExtension.WordCounter();
+	test("Google Search", (done) => {
 
-		vscode.workspace.openTextDocument(path.join(__dirname, '..', '..', 'vsc-extension-quickstart.md')).then((document) => {
-			assert.equal(testWordCounter._getWordCount(document), 254);
+		vscode.workspace.openTextDocument(path.join(__dirname, '..', '..', 'README.md')).then((document) => {
+			myExtension.GoogleSearchController.extractPhraseAndSearch();
 			done();
 		}, (error) => {
-			assert.fail(error);
+			assert.fail(error, null, 'Failed to load search', '');
 			done();
 		});
 	});
