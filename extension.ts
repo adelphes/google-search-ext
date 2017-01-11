@@ -54,9 +54,14 @@ export class GoogleSearchController {
         let selStart, selEnd;
         if (editor.selection.isEmpty) {
             selStart = editor.document.offsetAt(editor.selection.anchor);
-            for (var i=selStart; i >= 0; i--) {
+            // the next or previous character at the caret must be a word character
+            var i=selStart-1;
+            if (!((i < text.length-1 && /\w/.test(text[i+1])) || (i > 0 && /\w/.test(text[i]))))
+                return '';
+            for (; i >= 0; i--) {
                 if (!/\w/.test(text[i])) break;
             }
+            if (i < 0) i = 0;
             for (; i < text.length; i++) {
                 if (/\w/.test(text[i])) break;
             }
@@ -67,7 +72,10 @@ export class GoogleSearchController {
             selStart = editor.document.offsetAt(editor.selection.start);
             selEnd = editor.document.offsetAt(editor.selection.end);
         }
-        let phrase = text.slice(selStart, selEnd);
+        let phrase = text.slice(selStart, selEnd).trim();
+        phrase = phrase.replace(/\s\s+/g,' ');
+        // limit the maximum searchable length to 100 characters
+        phrase = phrase.slice(0, 100).trim();
         return phrase;
     }
 
