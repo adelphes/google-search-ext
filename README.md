@@ -1,6 +1,6 @@
-# google-search-ext README
+# Google Search
  
-This is a simple extension that allows developers to perform a quick Google search of any highlighted text, right from within the VS Code editor.
+A simple extension allowing developers to perform a Google search of any highlighted text, straight from the VS Code editor.
 
 * Highlight some text in the editor (or just point the cursor inside a word)
 * Use the VS Code Command Palette or Menu tool button to launch a preview window with the Google search results
