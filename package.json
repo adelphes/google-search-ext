@@ -1,0 +1,51 @@
+{
+	"name": "google-search-ext",
+	"displayName": "Google Search",
+	"version": "0.1.0",
+	"publisher": "adelphes",
+	"description": "Enables a Google search from inside the VS Code editor.",
+	"author": {
+		"name": "adelphes"
+	},
+	"categories": [
+		"Other"
+	],
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"icon": "images/g.png",
+	"galleryBanner": {
+		"color": "#C80000",
+		"theme": "dark"
+	},
+	"activationEvents": [
+		"onCommand:google-search-ext.searchGoogle"
+	],
+	"contributes": {
+        "commands": [{
+            "command": "google-search-ext.searchGoogle",
+            "title": "Search Google"
+        }],
+ 		"menus": {
+			"editor/title": [{
+				"when": "editorHasSelection",
+				"command": "google-search-ext.searchGoogle",
+				"group": "navigation"
+			}]
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/adelphes/google-search-ext.git"
+	},
+	"engines": {
+		"vscode": "^0.11.0"
+	},
+	"main": "./out/extension",
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+	},
+	"devDependencies": {
+		"vscode": "^0.11.0",
+		"typescript": "^2.0.0"
+	}
+}
