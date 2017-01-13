@@ -9,11 +9,11 @@ A simple extension allowing developers to perform a Google search of any highlig
 
 ## Functionality
 
-The Google search extension allows developers to highlight a section of their code 
-and perform a search, displaying the results in a separate pane within VS Code.
+The Google search extension allows developers to highlight a section of their code and perform a search, displaying the results in a separate pane within VS Code.
 
-Clicking on any of the links in the search results launches into your browser for a fuller experience.
+Clicking on any of the links in the search results launches into your browser for a fuller experience.  
+Use it to gain quick access to documentation, find code snippets, check spelling or use Google's numeric expression calculator.
 
-It's simple, quick and effective.
+If you run into any problems, please log an issue on [GitHub](https://github.com/adelphes/google-search-ext/issues).
 
 ![Quick Google search](images/search.gif)

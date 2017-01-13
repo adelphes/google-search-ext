@@ -1,7 +1,11 @@
-## Version 0.1.1
+### Version 0.1.2
 
-Limit maximum length of search queries and improve single word extraction.
+- Improve display of network connectivity problems.
 
-## Version 0.1.0
+### Version 0.1.1
 
-Initial version
+- Limit maximum length of search queries and improve single word extraction.
+
+### Version 0.1.0
+
+- Initial version

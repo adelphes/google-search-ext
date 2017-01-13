@@ -1,7 +1,7 @@
 {
 	"name": "google-search-ext",
 	"displayName": "Google Search",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"publisher": "adelphes",
 	"description": "Enables Google Search from the VS Code editor.",
 	"author": {

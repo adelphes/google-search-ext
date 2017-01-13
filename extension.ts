@@ -13,7 +13,7 @@ export function activate(ctx: ExtensionContext) {
     // The command has been defined in the package.json file
     // The commandId parameter must match the command field in package.json
     var search_google_cmd = commands.registerCommand('google-search-ext.searchGoogle', () => {
-        GoogleSearchController.extractPhraseAndSearch();
+    GoogleSearchController.extractPhraseAndSearch();
     });
     
     // add to a list of disposables which are disposed when this extension
@@ -130,7 +130,11 @@ new search to get any results.
 (function() {
     function logerr(err) {
         console.log(err);
-        document.body.innerHTML = err;
+        // Roooaaaar!
+        var imgb64 = 'iVBORw0KGgoAAAANSUhEUgAAACsAAAArCAYAAADhXXHAAAAABHNCSVQICAgIfAhkiAAAAPpJREFUWIXtl00OhCAMRmHiDeGY9IzOqolBmwr9mSnhrVwg1Ocn1JyMKaWckvsBIOP1R16OH5kfMofUaA8AZDezrbXUWhPNESoGh9dCtVbxHKHM7mKt2MVa4bYbUFyPU45QZv/2uH0yHtMsmhjJ0BNvjc6sE8qsym6g3Q5ShDJ7yyzCZcqiuebGhDJLZpbaHbSM4rwj84UyS2bWmuX32V2sFbfceGV3JrPuzbekUSJvtDIsKTZ2Znu0TywJa5lFZg1rGEXWNItQhqkuStPswb1ezcVSkn2wYrPUw2j9LV8Jldnp41Y7Hm9gf2uQXxTXY55ZbtwIITKLD/4FTcJrVgXsz78AAAAASUVORK5CYII=';
+        var oh = '<img src="data:image/png;base64,'+imgb64+'">';
+        document.body.innerHTML = ['<div style="padding:1em;text-align:center;">',oh,'<div style="color:#333;padding-top:1em;">',err,'</div>','</div>'].join('');
+        document.body.style.background='#F7F7F7';
     }
 
     function replacePage(content) {
@@ -141,13 +145,14 @@ new search to get any results.
                 .replace(/<input\\b/g,'<input style="display:none" disabled="disabled"')
                 .replace(/<form\\b/g,'<form style="display:none"')
                 .replace(/class="action-menu/g,'style="display:none" class="action-menu')
-                .replace(/href="\\/search/g,'href="${urlorigin}/search')
-                .replace(/href='\\/search/g,"href='${urlorigin}/search");
+                .replace(/href="\\//g,'href="${urlorigin}/')
+                .replace(/href='\\//g,"href='${urlorigin}/");
             document.body.innerHTML = body;
+            document.body.style.background='#fff';
+            document.body.style.color='#333';
         } catch(err) {
             logerr(err);
         }
-        document.body.style.background='#fff';
     }
 
     function showHTTPError(code) {
@@ -158,7 +163,7 @@ new search to get any results.
         var httpRequest = new XMLHttpRequest();
         if (!httpRequest) return logerr('new XMLHttpRequest() failed');
         httpRequest.onerror = function(e) {
-            logerr('Request failed. The website is unavailable or cannot be loaded due to access control origin restrictions.');
+            logerr("Request failed. There's a problem with your network connectivity or the site cannot be contacted.");
         }
         httpRequest.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE) {
