@@ -30,7 +30,28 @@
 				"command": "google-search-ext.searchGoogle",
 				"group": "navigation"
 			}]
-		}
+		},
+		"configuration": [{
+			"title": "Google Search",
+			"properties": {
+				"google-search-ext.interface-language": {
+					"type": "string",
+					"description": "Sets the interface language parameter ('hl') of the Google query. Commonly a two letter code. Values list: https://developers.google.com/custom-search/docs/xml_results_appendices#interfaceLanguages"
+				},
+				"google-search-ext.language": {
+					"type": "string",
+					"description": "Sets the parameter limiting results by language ('lr') of the Google query. Should be a value of the format 'lang_<2-letter-lowercase-code>', e.g. lang_de for German. Values list: https://developers.google.com/custom-search/docs/xml_results_appendices#languageCollections"
+				},
+				"google-search-ext.country": {
+					"type": "string",
+					"description": "Sets the parameter limiting results by country ('cr') of the Google query. Should be a value of the format 'country<2-letter-uppercase-code>', e.g. countryFR for France. Values list: https://developers.google.com/custom-search/docs/xml_results_appendices#countryCollections"
+				},
+				"google-search-ext.custom-query": {
+					"type": "string",
+					"description": "Anything that should be added to the query string of the URL. E.g. 'num=10&as_qdr=3d', which limits the number of results to 10 and sets the date range to the last three days. Documentation on available parameters: https://developers.google.com/custom-search/docs/xml_results#wsQueryTerms"
+				}
+			}
+		}]
 	},
 	"repository": {
 		"type": "git",

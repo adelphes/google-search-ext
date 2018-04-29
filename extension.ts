@@ -29,9 +29,25 @@ export class GoogleSearchController {
     }
 
     private static showHTMLWindow(phrase: string) {
-        let uriphrase = encodeURI(phrase);
-        let query = `q=${uriphrase}&oq=${uriphrase}&sourceid=chrome&ie=UTF-8`;
-        let previewUri = Uri.parse(`${GoogleSearchProvider.SCHEME}://google/search.html?${query}`);
+        const config = workspace.getConfiguration("google-search-ext");
+        const parameterConfigMapping: [string, string][] = [
+            ["hl", "interface-language"],
+            ["cr", "country"],
+            ["lr", "language"],
+        ];
+        const customQuery = config.get<string>("custom-query");
+
+        const uriphrase = encodeURI(phrase);
+        const query = [
+                `q=${uriphrase}`,
+                `oq=${uriphrase}`,
+                'sourceid=chrome',
+                'ie=UTF-8'
+            ]
+            .concat(parameterConfigMapping.map(([p, name]) => `${p}=${config.get<string>(name)}`))
+            .concat(customQuery ? [customQuery] : [])
+            .join("&");
+        const previewUri = Uri.parse(`${GoogleSearchProvider.SCHEME}://google/search.html?${query}`);
 
         return commands.executeCommand(
             "vscode.previewHtml",
