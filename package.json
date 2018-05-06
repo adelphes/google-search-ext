@@ -39,6 +39,14 @@
             {
                 "title": "Google Search",
                 "properties": {
+                    "google-search-ext.selection-mode": {
+                        "type": "string",
+                        "description": "Sets how the search term is determined. The default, \"cursor\", uses the selection if any, or the word under/at the cursor if there is none. \"selection\" only uses explicit selections as search terms.",
+                        "default": "cursor",
+                        "enum": [
+                            "cursor", "selection"
+                        ]
+                    },
                     "google-search-ext.interface-language": {
                         "type": "string",
                         "description": "Sets the interface language parameter ('hl') of the Google query. Commonly a two letter code. Values list: https://developers.google.com/custom-search/docs/xml_results_appendices#interfaceLanguages"
