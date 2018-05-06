@@ -13,7 +13,7 @@ export function activate(ctx: ExtensionContext) {
     // The command has been defined in the package.json file
     // The commandId parameter must match the command field in package.json
     var search_google_cmd = commands.registerCommand('google-search-ext.searchGoogle', () => {
-    GoogleSearchController.extractPhraseAndSearch();
+        GoogleSearchController.extractPhraseAndSearch();
     });
     
     // add to a list of disposables which are disposed when this extension
@@ -24,12 +24,16 @@ export function activate(ctx: ExtensionContext) {
 }
 
 export class GoogleSearchController {
-
-    constructor() {
+    /**
+     * Gets the configuration section for the extension.
+     */
+    private static getConfig() {
+        return workspace.getConfiguration("google-search-ext");
     }
 
     private static showHTMLWindow(phrase: string) {
-        const config = workspace.getConfiguration("google-search-ext");
+        const config = this.getConfig();
+        /** Maps query parameters to configuration options. */
         const parameterConfigMapping: [string, string][] = [
             ["hl", "interface-language"],
             ["cr", "country"],
@@ -44,9 +48,10 @@ export class GoogleSearchController {
                 'sourceid=chrome',
                 'ie=UTF-8'
             ]
-            .concat(parameterConfigMapping.map(([p, name]) => `${p}=${config.get<string>(name)}`))
+            .concat(parameterConfigMapping.map(([parameter, name]) => `${parameter}=${config.get<string>(name)}`))
             .concat(customQuery ? [customQuery] : [])
             .join("&");
+
         const previewUri = Uri.parse(`${GoogleSearchProvider.SCHEME}://google/search.html?${query}`);
 
         return commands.executeCommand(
@@ -60,20 +65,28 @@ export class GoogleSearchController {
     }
 
     private static getSearchPhrase(): string {
-        let editor = window.activeTextEditor;
-        if (!editor) {
-            window.showInformationMessage('Google Search: Open an editor and select a word / highlight some text to search.');
-            return '';
-        }
-        let text = editor.document.getText();
-        if (!text) return '';
+        const selectionMode = this.getConfig().get<"cursor" | "selection">("selection-mode");
+
+        const editor = window.activeTextEditor;
+        if (!editor)
+            return null;
+
+        const text = editor.document.getText();
+        if (!text)
+            return null;
+
+        // The mode "selection" requires explicit text selections
+        if (selectionMode == "selection" && editor.selection.isEmpty)
+            return null;
+
         let selStart, selEnd;
+
         if (editor.selection.isEmpty) {
             selStart = editor.document.offsetAt(editor.selection.anchor);
             // the next or previous character at the caret must be a word character
-            var i=selStart-1;
-            if (!((i < text.length-1 && /\w/.test(text[i+1])) || (i > 0 && /\w/.test(text[i]))))
-                return '';
+            let i = selStart - 1;
+            if (!((i < text.length - 1 && /\w/.test(text[i + 1])) || (i > 0 && /\w/.test(text[i]))))
+                return null;
             for (; i >= 0; i--) {
                 if (!/\w/.test(text[i])) break;
             }
@@ -81,13 +94,14 @@ export class GoogleSearchController {
             for (; i < text.length; i++) {
                 if (/\w/.test(text[i])) break;
             }
-            let wordMatch = text.slice(i).match(/^\w+/);
+            const wordMatch = text.slice(i).match(/^\w+/);
             selStart = i;
             selEnd = selStart + (wordMatch ? wordMatch[0].length : 0);
         } else {
             selStart = editor.document.offsetAt(editor.selection.start);
             selEnd = editor.document.offsetAt(editor.selection.end);
         }
+
         let phrase = text.slice(selStart, selEnd).trim();
         phrase = phrase.replace(/\s\s+/g,' ');
         // limit the maximum searchable length to 100 characters
@@ -95,10 +109,16 @@ export class GoogleSearchController {
         return phrase;
     }
 
-    public static extractPhraseAndSearch() {
+    public static async extractPhraseAndSearch() {
         let phrase = GoogleSearchController.getSearchPhrase();
-        if (phrase) 
-            this.showHTMLWindow(phrase);
+        if (phrase == null)
+        {
+            phrase = await window.showInputBox({ prompt: "Enter a Google search query." });
+            if (phrase === undefined)
+                return;
+        }
+
+        return this.showHTMLWindow(phrase);
     }
 
     public dispose() {

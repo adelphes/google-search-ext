@@ -16,10 +16,18 @@ import * as myExtension from '../extension';
 suite("Google Search Tests", () => {
 
 	// Defines a Mocha unit test
-	test("Google Search", (done) => {
+	test("Google Search", done => {
+		const documentPath = path.join(__dirname, '..', '..', 'README.md');
+		vscode.workspace.openTextDocument(documentPath).then(async document => {
+			const editor = await vscode.window.showTextDocument(document);
+			// Ensure explicit selection
+			const firstLine = document.lineAt(0);
+			editor.selection = new vscode.Selection(
+				firstLine.range.start,
+				firstLine.range.end
+			);
 
-		vscode.workspace.openTextDocument(path.join(__dirname, '..', '..', 'README.md')).then((document) => {
-			myExtension.GoogleSearchController.extractPhraseAndSearch();
+			await vscode.commands.executeCommand("google-search-ext.searchGoogle");
 			done();
 		}, (error) => {
 			assert.fail(error, null, 'Failed to load search', '');
